@@ -5,6 +5,7 @@ const webpack = require("webpack-stream");
 const browsersync = require("browser-sync");
 
 const dist = "./dist/";
+//const dist = "./domains/localhost/course7_JS_Advanced_1/"; 
 
 gulp.task("copy-html", () => {
     return gulp.src("./src/index.html")
@@ -50,6 +51,11 @@ gulp.task("copy-assets", () => {
                 .on("end", browsersync.reload);
 });
 
+gulp.task("copy-db", () => {
+  return gulp.src("./db.json")
+              .pipe(gulp.dest(dist))
+});
+
 gulp.task("watch", () => {
     browsersync.init({
 		server: "./dist/",
@@ -58,11 +64,12 @@ gulp.task("watch", () => {
     });
     
     gulp.watch("./src/index.html", gulp.parallel("copy-html"));
+    gulp.watch("./db.json", gulp.parallel("copy-db"));
     gulp.watch("./src/assets/**/*.*", gulp.parallel("copy-assets"));
     gulp.watch("./src/js/**/*.js", gulp.parallel("build-js"));
 });
 
-gulp.task("build", gulp.parallel("copy-html", "copy-assets", "build-js"));
+gulp.task("build", gulp.parallel("copy-html", "copy-assets", "build-js", "copy-db"));
 
 gulp.task("build-prod-js", () => {
     return gulp.src("./src/js/main.js")

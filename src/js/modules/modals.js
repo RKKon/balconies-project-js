@@ -1,69 +1,69 @@
 "use strict"
+
+export const closeModal = (modal, crossClass = '.popup_close') => {
+  const crossCloseModal = document.querySelectorAll(crossClass);
+  modal.addEventListener('click', (e) => { // close Modal by click overlay
+    if (e.target.classList.contains('popup_overlay')) { 
+      modal.style.display = 'none' ;
+      document.body.style.overflow = ''; // come back to scroll on page
+      document.body.style.marginRight = `0px`;
+    }
+  })
+
+  crossCloseModal.forEach(cross => {  // close Modal by click cross
+    cross.addEventListener('click', () => {
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+      document.body.style.marginRight = `0px`;
+    })
+  })
+};
+
+export const calcScroll = () => {
+  let div = document.createElement('div');
+
+  div.style.width = "50px";
+  div.style.height = "50px";
+  div.style.overflow = "scroll";
+  div.style.visibility = "hidden";
+
+  document.body.append(div);
+  let scrollWidth = div.offsetWidth - div.clientWidth;
+  div.remove();
+
+  return scrollWidth;
+};
+
 const modals = () => {
-  /* Modal  */
   const modalCallBack = document.querySelector('.popup');
   const orderCallBack = document.querySelectorAll('.phone_link');
-  const crossCloseModal = document.querySelectorAll('.popup_close');
 
   const measurerCallBtn = document.querySelector('.popup_engineer_btn');
   const measurerCallModal = document.querySelector('.popup_engineer');
+  const scroll = calcScroll();
+  const showModalCallBack = (block = 'block') => modalCallBack.style.display = block;
+  const showMeasurerCallModal = (block = 'block') => measurerCallModal.style.display = block;
 
-  function showModal(openCallBackModal, openCallMeasurerModal) {
+  const showModal = (openCallBackModal, openCallMeasurerModal) => {
     openCallBackModal.forEach(modal => { 
       modal.addEventListener('click', (e) => {
         e.preventDefault() // because of tag <a>
-        modalCallBack.style.display = 'block';
+        showModalCallBack();
+        document.body.style.overflow = 'hidden'; // locked scroll on page
+        document.body.style.marginRight = `${scroll}px`;   
       })
     })
     openCallMeasurerModal.addEventListener('click', () => { 
-      measurerCallModal.style.display = 'block';
+      showMeasurerCallModal();
+      document.body.style.overflow = 'hidden';
+      document.body.style.marginRight = `${scroll}px`;  
     })
   }
   showModal(orderCallBack, measurerCallBtn);
-  setTimeout(() => measurerCallModal.style.display = 'block', 1160000) //in 60 sec show Modal
+  setTimeout(showMeasurerCallModal, 1160000) //in 60 sec show Modal
 
-  function closeModal(modal) {
-    modal.addEventListener('click', (e) => { // close Modal by click overlay
-      if (e.target.classList.contains('popup_overlay')) { 
-        modal.style.display = 'none' ;
-      }
-    })
-
-    crossCloseModal.forEach(cross => {  // close Modal by click cross
-      cross.addEventListener('click', () => {
-        modal.style.display = 'none';
-      })
-    })
-  } 
-  closeModal(measurerCallModal);
-  closeModal(modalCallBack);
-
-  
-  /* From send*/
-  const forMessageDiv = document.querySelector('.header')
-  const form = document.querySelectorAll('.form');
-  
-  form.forEach(form => {
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      console.log('sent');
-      const div = document.createElement('div');
-      div.innerHTML = `<h2 class="modal_message"> 
-        <span class="modal_message_tac">Thank you!</span> Soon we will contact you!</h2>`;
-      measurerCallModal.style.display = 'none'; // close measurerCallModal
-      modalCallBack.style.display = 'none'; // close modalCallBack  
-      forMessageDiv.append(div)
-      setTimeout(() => {div.remove()}, 3000)  
-      // if (false) {
-      //   div.innerHTML = `<h2 class="modal_message"> Loading... </h2>`;
-      // } else if (true) {
-      //   div.innerHTML = `<h2 class="modal_message"> 
-      //   <span class="modal_message_tac">Thank you!</span> Soon we will contact you!</h2>`;
-      // } else {
-      //   div.innerHTML = `<h2 class="modal_message"> Error! Please try again.</h2>`;
-      // }   
-    })
-  })
+  closeModal(measurerCallModal, '.popup_close');
+  closeModal(modalCallBack, '.popup_close');
 
 };
 

@@ -18,6 +18,20 @@ body {
   color: red;
 }
 
+.faded {
+  animation-name: faded;
+  animation-duration: 1.5;
+}
+
+@keyframes faded {
+  from {
+    opacity: 0.1;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 a:hover {
   text-decoration: none;
 }
@@ -111,6 +125,13 @@ textarea:focus {
   margin-bottom: 2rem;
   font-size: 1.1rem;
   color: #666;
+}
+
+.modal_error_message {
+  display: block; 
+  margin: -14px auto 10px auto;
+  color: #cc0000;
+  font-size: 15px;  
 }
 
 .button {
@@ -311,6 +332,10 @@ textarea:focus {
   font-style: normal;
   color: #0089cd;
   text-decoration: underline;
+}
+.phone_click_link {
+  text-decoration: none; 
+  display: inline !important;
 }
 
 /*Main*/
@@ -707,6 +732,9 @@ textarea:focus {
   font-size: 40px;
   margin-right: 10px;
 }
+.numbers1:last-child {
+  margin-right: 0px;
+}
 
 .timer1 span{
   margin-right: 2px;
@@ -855,6 +883,16 @@ textarea:focus {
   transform: translateX(-50%);
   z-index: 15;
 }
+.phone_bigger_size_img {
+  position: fixed;
+  width: 95%;
+ /*  height: 80%; */
+  top: 15%;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  z-index: 15;
+}
 .modal_message {
   position: fixed;
   top: 10%;
@@ -871,6 +909,9 @@ textarea:focus {
   display: block;
   text-align: center;
   margin-bottom: 5px;
+}
+.input_error {
+  border: 2px solid #de1010;
 }
 
 .popup,
@@ -980,6 +1021,11 @@ textarea:focus {
   margin-bottom: 3rem;
   width: 30rem;
 }
+.big_img_active {
+  display: block !important; 
+  margin-right: auto;
+  margin-left: auto;
+} 
 
 .popup_calc_content #type1 {
   display: inline-block;
@@ -1360,6 +1406,10 @@ textarea:focus {
     margin-right: 0;
     margin-bottom: 2rem;
   }
+  
+  .timer1 {
+    margin: 0 auto;
+  }
 }
 
 @media (max-width: 767px) {
@@ -1510,6 +1560,10 @@ textarea:focus {
     font-size: 1.4rem;
     color: #0089cd;
     text-decoration: underline;
+  }
+
+  .timer1 {
+    margin: 0 auto;
   }
 }
 
@@ -1832,7 +1886,7 @@ textarea:focus {
     margin-bottom: 1rem;
     outline: none;
   }
-
+  
   .popup_calc_profile_content img {
     width: 20%;
   }
@@ -1849,6 +1903,12 @@ textarea:focus {
 
   .popup_calc_profile_button {
     padding: 1rem 5rem;
+  }
+
+  .timer1 {
+    margin: 0 auto;
+    padding: 8px;
+    width: 100%;
   }
 }
 
