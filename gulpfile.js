@@ -3,6 +3,9 @@
 const gulp = require("gulp");
 const webpack = require("webpack-stream");
 const browsersync = require("browser-sync");
+const cleanCSS = require('gulp-clean-css');
+const rename = require("gulp-rename");
+const autoprefixer = require('gulp-autoprefixer');
 
 const dist = "./dist/";
 //const dist = "./domains/localhost/course7_JS_Advanced_1/"; 
@@ -54,6 +57,16 @@ gulp.task("copy-assets", () => {
 gulp.task("copy-db", () => {
   return gulp.src("./db.json")
               .pipe(gulp.dest(dist))
+});
+
+gulp.task('styles', () => {
+  return gulp.src("src/assets/**/*.+(scss|sass)")
+      //.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+      .pipe(rename({suffix: '.min', prefix: ''}))
+      .pipe(autoprefixer())
+      .pipe(cleanCSS({compatibility: 'ie8'}))
+      .pipe(gulp.dest("src/css"))
+      .pipe(browsersync.stream());
 });
 
 gulp.task("watch", () => {
