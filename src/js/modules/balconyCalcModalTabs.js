@@ -9,24 +9,20 @@ export const showErrorInputMessage = (placePutMessage, errorMessage = 'Error, en
   setTimeout(() => divErrorMessage.remove(), 4000);
 };
 
-const calcInTabs = () => {
+const balconyCalcModalTabs = (state) => {
   const balconyPopupCalc = document.querySelector('.popup_calc');
   const balconyType = document.querySelectorAll('.balcon_icons_img');
-  
-  // validation of size in calc 
   const balconyPopupCalcBtn = document.querySelector('.popup_calc_button');
   const balconyPopupCalcProfile = document.querySelector('.popup_calc_profile');
-    
-  // work with PopupCalcProfile
   const balconyCalcCheckbox = document.querySelectorAll('input.checkbox');
   const popupCalcProfileBtn = document.querySelector('.popup_calc_profile_button');
   const balconyPopupCalcEnd = document.querySelector('.popup_calc_end');
+
   const scroll = calcScroll(); //smoothly Remove Scroll
 
-  // makes ability to close calcModal in any time if form not sent.
   closeModal(balconyPopupCalc, '.popup_calc_close');
-  closeModal(balconyPopupCalcProfile, '.popup_calc_profile_close');
-  closeModal(balconyPopupCalcEnd, '.popup_calc_end_close');
+  closeModal(balconyPopupCalcProfile, '.popup_calc_profile_close', false);
+  closeModal(balconyPopupCalcEnd, '.popup_calc_end_close', false);
 
   const balconyRemoveActiveClass = () => {
     return balconyType.forEach(balcony => balcony.classList.remove('do_image_more'));
@@ -38,12 +34,10 @@ const calcInTabs = () => {
       balconyModalBigImg[0].classList.add('big_img_active'); //show first type of big img
       balcony.addEventListener('click', () => {
         balconyRemoveActiveClass();
-        balcony.classList.add('do_image_more'); // add active class
-        
+        balcony.classList.add('do_image_more'); // add active class      
         // add big picture
-        balconyModalBigImg.forEach(bigImg => bigImg.classList.remove('big_img_active')); //remove class active 
+        balconyModalBigImg.forEach(bigImg => bigImg.classList.remove('big_img_active')); //remove class
         balconyModalBigImg[i].classList.add('big_img_active'); //add class active 
-  
       })
     })
   };
@@ -53,7 +47,7 @@ const calcInTabs = () => {
   const closeBalconyPopupCalc = () => balconyPopupCalc.style.display = 'none';
 
   const validationBalconySize = () => {
-    balconyPopupCalcBtn.addEventListener('click', (e) => {
+    balconyPopupCalcBtn.addEventListener('click', () => {
       const balconyWidthSize = document.querySelector('#width'); 
       const balconyHeightSize = document.querySelector('#height');
       const inputWidth = +balconyWidthSize.value;
@@ -98,17 +92,10 @@ const calcInTabs = () => {
   choosingColdOrWarmBalcony();
   
   const setBalconyCalcCheckbox = (i = 0) => {
-    if (balconyCalcCheckbox[1].checked && balconyCalcCheckbox[0].checked) {
-      balconyCalcCheckbox[1].checked = false;
-      balconyCalcCheckbox[0].checked = false;
-      balconyCalcCheckbox[i].checked = true;
-    } else if (balconyCalcCheckbox[1].checked) {
-      balconyCalcCheckbox[1].checked = false;
-      balconyCalcCheckbox[i].checked = true;
-    } else {
-      balconyCalcCheckbox[0].checked = false;
-      balconyCalcCheckbox[i].checked = true;
-    }
+    balconyCalcCheckbox[1].checked = false;
+    balconyCalcCheckbox[0].checked = false;
+    balconyCalcCheckbox[i].checked = true;
+    i === 0 ? state["profile"] = 'Cold' : state["profile"] = 'Warm'; // set up default profile(cold or warm)
   }
 
   const glazingPriceBtnCold = document.querySelectorAll('.glazing_cold_btn');
@@ -119,6 +106,8 @@ const calcInTabs = () => {
         balconyPopupCalc.style.display = 'block';
         document.body.style.marginRight = `${scroll}px`;
         setBalconyCalcCheckbox(i);
+        if (!state["form"]) {state["form"] = 1;} // set up default balcony form
+        if (!state["type"]) {state["type"] = 'tree';} // by default pick tree      
         document.body.style.overflow = 'hidden'; // block scroll
       })
     })
@@ -128,4 +117,4 @@ const calcInTabs = () => {
       
 };
 
-export default calcInTabs;
+export default balconyCalcModalTabs;

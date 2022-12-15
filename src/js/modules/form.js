@@ -1,8 +1,7 @@
-// import { sendToServer } from "../server/server";
 import { messageStatus } from "../server/server";
 import { messageModal } from "../server/server";
 import { postData } from "../server/server";
-import { showErrorInputMessage } from "./calcInTabs";
+import { showErrorInputMessage } from "./balconyCalcModalTabs";
 import checkNumInputs from "./checkNumInputs";
 
 const form = (state) => {
@@ -39,27 +38,24 @@ const form = (state) => {
               .then(data => {
                 console.log(data)
                 messageModal(messageStatus.success)
-              }) //.then(data => data)
+              })
               .catch(() => messageModal(messageStatus.error))
-              //.finally(() => form.reset())
           };
           sendToServer(form, 'clients')
 
           closeModalCallBack();
           closeMeasurerCallModal(); 
           closeBalconyEndForm();
-          document.body.style.overflow = ''; // come back to scroll on page
+          document.body.style.overflow = ''; // back scroll on page
 
           document.querySelector('#width').value = ''; // clear balcony form after sent!
-          document.querySelector('#height').value = ''; // clear balcony form after sent!
+          document.querySelector('#height').value = '';
           inputName.value = ''; 
-          inputPhone.value = '';
-           
+          inputPhone.value = '';        
         } else { 
           inputPhone.classList.add('input_error');
           showErrorInputMessage(inputPhone, 'Please, enter correct phone number.');
-        }
-         
+        }   
       })
     })
   };

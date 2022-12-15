@@ -1,4 +1,4 @@
-const tabs = () => {
+const tabs = (state) => {
   const tabItem = document.querySelectorAll('.glazing_block');
   const tabContent = document.querySelectorAll('.glazing_content');
   
@@ -8,9 +8,12 @@ const tabs = () => {
   const removeActiveClassTab = () => tabItem.forEach(tab => tab.children[1].classList.remove('active'));
   
   const choosingRightBalconyInFormCalcProfile = (i) => {
-    const balconyTypeInModal = document.querySelector('#view_type').querySelectorAll('option');
-    balconyTypeInModal.forEach((balconyType, index) => {
-      if (index === i) { return balconyType.selected = true; }
+    const balconyTypesInModal = document.querySelector('#view_type').querySelectorAll('option');
+    balconyTypesInModal.forEach((balconyType, index) => {
+      if (index === i) { 
+        state["type"] = balconyType.value; // pick in calc modal right type of balcony(in select)
+        return balconyType.selected = true; 
+      }
     })
   };
 

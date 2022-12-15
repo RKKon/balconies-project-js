@@ -1,22 +1,25 @@
 "use strict"
 
-export const closeModal = (modal, crossClass = '.popup_close') => {
+export const closeModal = (modal, crossClass = '.popup_close', allowedClickOverlay = true) => {
   const crossCloseModal = document.querySelectorAll(crossClass);
-  modal.addEventListener('click', (e) => { // close Modal by click overlay
-    if (e.target.classList.contains('popup_overlay')) { 
-      modal.style.display = 'none' ;
-      document.body.style.overflow = ''; // come back to scroll on page
-      document.body.style.marginRight = `0px`;
-    }
+
+  const hideDisplay = () => {
+    modal.style.display = 'none' ;
+    document.body.style.overflow = ''; // come back to scroll on page
+    document.body.style.marginRight = `0px`;
+  }
+
+  if (allowedClickOverlay) {
+    modal.addEventListener('click', (e) => { // close Modal by click overlay
+      if (e.target.classList.contains('popup_overlay')) { hideDisplay() }
+    })
+  }
+
+  document.addEventListener('keydown', (e) => { // close Modal by keydown Escape
+    if (e.code === 'Escape') { hideDisplay(); }
   })
 
-  crossCloseModal.forEach(cross => {  // close Modal by click cross
-    cross.addEventListener('click', () => {
-      modal.style.display = 'none';
-      document.body.style.overflow = '';
-      document.body.style.marginRight = `0px`;
-    })
-  })
+  crossCloseModal.forEach(cross => cross.addEventListener('click', hideDisplay))
 };
 
 export const calcScroll = () => {
@@ -60,7 +63,7 @@ const modals = () => {
     })
   }
   showModal(orderCallBack, measurerCallBtn);
-  setTimeout(showMeasurerCallModal, 1160000) //in 60 sec show Modal
+  setTimeout(showMeasurerCallModal, 20000) //in 20 sec show Modal
 
   closeModal(measurerCallModal, '.popup_close');
   closeModal(modalCallBack, '.popup_close');

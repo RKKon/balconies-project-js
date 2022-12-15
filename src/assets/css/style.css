@@ -18,18 +18,22 @@ body {
   color: red;
 }
 
+.visibility_on {
+  visibility: visible;
+}
+
+.visibility_off {
+  visibility: hidden;
+}
+
 .faded {
   animation-name: faded;
-  animation-duration: 1.5;
+  animation-duration: 1s;
 }
 
 @keyframes faded {
-  from {
-    opacity: 0.1;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0.1; }
+  to { opacity: 1; }
 }
 
 a:hover {
