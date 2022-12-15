@@ -44,27 +44,32 @@ const modals = () => {
   const measurerCallBtn = document.querySelector('.popup_engineer_btn');
   const measurerCallModal = document.querySelector('.popup_engineer');
   const scroll = calcScroll();
-  const showModalCallBack = (block = 'block') => modalCallBack.style.display = block;
-  const showMeasurerCallModal = (block = 'block') => measurerCallModal.style.display = block;
+
+  const showModalCallBack = () => modalCallBack.style.display = 'block';
+  const showMeasurerCallModal = () => measurerCallModal.style.display = 'block';
+  const lockScrollOnPage = () => {
+    document.body.style.overflow = 'hidden'; // locked scroll on page
+    document.body.style.marginRight = `${scroll}px`;   
+  };
+  const showModalInTime = setTimeout(showMeasurerCallModal, 20000) //in 20 sec show Modal
 
   const showModal = (openCallBackModal, openCallMeasurerModal) => {
     openCallBackModal.forEach(modal => { 
       modal.addEventListener('click', (e) => {
         e.preventDefault() // because of tag <a>
         showModalCallBack();
-        document.body.style.overflow = 'hidden'; // locked scroll on page
-        document.body.style.marginRight = `${scroll}px`;   
+        lockScrollOnPage();
+        clearTimeout(showModalInTime);
       })
     })
     openCallMeasurerModal.addEventListener('click', () => { 
       showMeasurerCallModal();
-      document.body.style.overflow = 'hidden';
-      document.body.style.marginRight = `${scroll}px`;  
+      lockScrollOnPage();
+      clearTimeout(showModalInTime);
     })
   }
   showModal(orderCallBack, measurerCallBtn);
-  setTimeout(showMeasurerCallModal, 20000) //in 20 sec show Modal
-
+ 
   closeModal(measurerCallModal, '.popup_close');
   closeModal(modalCallBack, '.popup_close');
 

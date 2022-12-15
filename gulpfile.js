@@ -60,12 +60,12 @@ gulp.task("copy-db", () => {
 });
 
 gulp.task('styles', () => {
-  return gulp.src("src/assets/**/*.+(scss|sass)")
+  return gulp.src("src/assets/css/style.css")
       //.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
       .pipe(rename({suffix: '.min', prefix: ''}))
       .pipe(autoprefixer())
       .pipe(cleanCSS({compatibility: 'ie8'}))
-      .pipe(gulp.dest("src/css"))
+      .pipe(gulp.dest(dist + "/assets/css"))
       .pipe(browsersync.stream());
 });
 
@@ -79,10 +79,11 @@ gulp.task("watch", () => {
     gulp.watch("./src/index.html", gulp.parallel("copy-html"));
     gulp.watch("./db.json", gulp.parallel("copy-db"));
     gulp.watch("./src/assets/**/*.*", gulp.parallel("copy-assets"));
+    gulp.watch("./src/assets/css/**/*.*", gulp.parallel("styles"));
     gulp.watch("./src/js/**/*.js", gulp.parallel("build-js"));
 });
 
-gulp.task("build", gulp.parallel("copy-html", "copy-assets", "build-js", "copy-db"));
+gulp.task("build", gulp.parallel("copy-html", "copy-assets", "build-js", "copy-db", "styles"));
 
 gulp.task("build-prod-js", () => {
     return gulp.src("./src/js/main.js")
