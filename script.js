@@ -15892,10 +15892,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_modals__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/modals */ "./src/js/modules/modals.js");
 /* harmony import */ var _modules_imageEnlargement__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/imageEnlargement */ "./src/js/modules/imageEnlargement.js");
 /* harmony import */ var _modules_tabs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/tabs */ "./src/js/modules/tabs.js");
-/* harmony import */ var _modules_calcInTabs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/calcInTabs */ "./src/js/modules/calcInTabs.js");
+/* harmony import */ var _modules_balconyCalcModalTabs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/balconyCalcModalTabs */ "./src/js/modules/balconyCalcModalTabs.js");
 /* harmony import */ var _modules_timer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/timer */ "./src/js/modules/timer.js");
 /* harmony import */ var _modules_form__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/form */ "./src/js/modules/form.js");
 /* harmony import */ var _modules_changeModalState__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/changeModalState */ "./src/js/modules/changeModalState.js");
+ // Slider left by order. It works a bit in mobile version.
 
 
 
@@ -15907,28 +15908,25 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener('DOMContentLoaded', () => {
   "use strict";
 
-  let modalState = {};
+  let modalState = {}; // main work happening with state in changeModalState(). But for user experience 
+  // I had to put some setting changing in state, like if user choose Aluminum balcony(not in form),
+  // in select and in data to server save that parameter.
+
   Object(_modules_changeModalState__WEBPACK_IMPORTED_MODULE_7__["default"])(modalState);
   Object(_modules_modals__WEBPACK_IMPORTED_MODULE_1__["default"])();
   Object(_modules_imageEnlargement__WEBPACK_IMPORTED_MODULE_2__["default"])();
-  Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_3__["default"])();
-  Object(_modules_calcInTabs__WEBPACK_IMPORTED_MODULE_4__["default"])();
+  Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_3__["default"])(modalState);
+  Object(_modules_balconyCalcModalTabs__WEBPACK_IMPORTED_MODULE_4__["default"])(modalState);
   Object(_modules_form__WEBPACK_IMPORTED_MODULE_6__["default"])(modalState);
-  Object(_modules_timer__WEBPACK_IMPORTED_MODULE_5__["default"])('2022-12-31');
-}); // clear object(modalState) after sent to server. And make more fill this object.
-// calcInTabs when fill form allowed to close only by click cross
-// 3) tabs apply animation by change display block on opacity or visibility etc.
-// (the same as 3)) more smooth animation in img show and modals
-// close modal by Esc. 
-// mobile - while touch movement on slider didn't move content inside, bad big image if touch
-// #10 is ready but need to set Timer
+  Object(_modules_timer__WEBPACK_IMPORTED_MODULE_5__["default"])('2022-12-31'); // you can set a date which you needed
+});
 
 /***/ }),
 
-/***/ "./src/js/modules/calcInTabs.js":
-/*!**************************************!*\
-  !*** ./src/js/modules/calcInTabs.js ***!
-  \**************************************/
+/***/ "./src/js/modules/balconyCalcModalTabs.js":
+/*!************************************************!*\
+  !*** ./src/js/modules/balconyCalcModalTabs.js ***!
+  \************************************************/
 /*! exports provided: showErrorInputMessage, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -15946,22 +15944,19 @@ const showErrorInputMessage = (placePutMessage, errorMessage = 'Error, enter cor
   setTimeout(() => divErrorMessage.remove(), 4000);
 };
 
-const calcInTabs = () => {
+const balconyCalcModalTabs = state => {
   const balconyPopupCalc = document.querySelector('.popup_calc');
-  const balconyType = document.querySelectorAll('.balcon_icons_img'); // validation of size in calc 
-
+  const balconyType = document.querySelectorAll('.balcon_icons_img');
   const balconyPopupCalcBtn = document.querySelector('.popup_calc_button');
-  const balconyPopupCalcProfile = document.querySelector('.popup_calc_profile'); // work with PopupCalcProfile
-
+  const balconyPopupCalcProfile = document.querySelector('.popup_calc_profile');
   const balconyCalcCheckbox = document.querySelectorAll('input.checkbox');
   const popupCalcProfileBtn = document.querySelector('.popup_calc_profile_button');
   const balconyPopupCalcEnd = document.querySelector('.popup_calc_end');
   const scroll = Object(_modals__WEBPACK_IMPORTED_MODULE_0__["calcScroll"])(); //smoothly Remove Scroll
-  // makes ability to close calcModal in any time if form not sent.
 
   Object(_modals__WEBPACK_IMPORTED_MODULE_0__["closeModal"])(balconyPopupCalc, '.popup_calc_close');
-  Object(_modals__WEBPACK_IMPORTED_MODULE_0__["closeModal"])(balconyPopupCalcProfile, '.popup_calc_profile_close');
-  Object(_modals__WEBPACK_IMPORTED_MODULE_0__["closeModal"])(balconyPopupCalcEnd, '.popup_calc_end_close');
+  Object(_modals__WEBPACK_IMPORTED_MODULE_0__["closeModal"])(balconyPopupCalcProfile, '.popup_calc_profile_close', false);
+  Object(_modals__WEBPACK_IMPORTED_MODULE_0__["closeModal"])(balconyPopupCalcEnd, '.popup_calc_end_close', false);
 
   const balconyRemoveActiveClass = () => {
     return balconyType.forEach(balcony => balcony.classList.remove('do_image_more'));
@@ -15974,10 +15969,10 @@ const calcInTabs = () => {
 
       balcony.addEventListener('click', () => {
         balconyRemoveActiveClass();
-        balcony.classList.add('do_image_more'); // add active class
+        balcony.classList.add('do_image_more'); // add active class      
         // add big picture
 
-        balconyModalBigImg.forEach(bigImg => bigImg.classList.remove('big_img_active')); //remove class active 
+        balconyModalBigImg.forEach(bigImg => bigImg.classList.remove('big_img_active')); //remove class
 
         balconyModalBigImg[i].classList.add('big_img_active'); //add class active 
       });
@@ -15991,7 +15986,7 @@ const calcInTabs = () => {
   const closeBalconyPopupCalc = () => balconyPopupCalc.style.display = 'none';
 
   const validationBalconySize = () => {
-    balconyPopupCalcBtn.addEventListener('click', e => {
+    balconyPopupCalcBtn.addEventListener('click', () => {
       const balconyWidthSize = document.querySelector('#width');
       const balconyHeightSize = document.querySelector('#height');
       const inputWidth = +balconyWidthSize.value;
@@ -16040,17 +16035,10 @@ const calcInTabs = () => {
   choosingColdOrWarmBalcony();
 
   const setBalconyCalcCheckbox = (i = 0) => {
-    if (balconyCalcCheckbox[1].checked && balconyCalcCheckbox[0].checked) {
-      balconyCalcCheckbox[1].checked = false;
-      balconyCalcCheckbox[0].checked = false;
-      balconyCalcCheckbox[i].checked = true;
-    } else if (balconyCalcCheckbox[1].checked) {
-      balconyCalcCheckbox[1].checked = false;
-      balconyCalcCheckbox[i].checked = true;
-    } else {
-      balconyCalcCheckbox[0].checked = false;
-      balconyCalcCheckbox[i].checked = true;
-    }
+    balconyCalcCheckbox[1].checked = false;
+    balconyCalcCheckbox[0].checked = false;
+    balconyCalcCheckbox[i].checked = true;
+    i === 0 ? state["profile"] = 'Cold' : state["profile"] = 'Warm'; // set up default profile(cold or warm)
   };
 
   const glazingPriceBtnCold = document.querySelectorAll('.glazing_cold_btn');
@@ -16062,6 +16050,17 @@ const calcInTabs = () => {
         balconyPopupCalc.style.display = 'block';
         document.body.style.marginRight = `${scroll}px`;
         setBalconyCalcCheckbox(i);
+
+        if (!state["form"]) {
+          state["form"] = 1;
+        } // set up default balcony form
+
+
+        if (!state["type"]) {
+          state["type"] = 'tree';
+        } // by default pick tree      
+
+
         document.body.style.overflow = 'hidden'; // block scroll
       });
     });
@@ -16071,7 +16070,7 @@ const calcInTabs = () => {
   openModalBalconyCalc(glazingPriceBtnWarm, 1);
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (calcInTabs);
+/* harmony default export */ __webpack_exports__["default"] = (balconyCalcModalTabs);
 
 /***/ }),
 
@@ -16101,7 +16100,7 @@ const changeModalState = state => {
       item.addEventListener(event, () => {
         switch (item.nodeName) {
           case 'SPAN':
-            state[prop] = i;
+            state[prop] = i + 1;
             break;
 
           case "INPUT":
@@ -16179,10 +16178,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_object_from_entries__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.from-entries */ "./node_modules/core-js/modules/es.object.from-entries.js");
 /* harmony import */ var core_js_modules_es_object_from_entries__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_from_entries__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _server_server__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../server/server */ "./src/js/server/server.js");
-/* harmony import */ var _calcInTabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./calcInTabs */ "./src/js/modules/calcInTabs.js");
+/* harmony import */ var _balconyCalcModalTabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./balconyCalcModalTabs */ "./src/js/modules/balconyCalcModalTabs.js");
 /* harmony import */ var _checkNumInputs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./checkNumInputs */ "./src/js/modules/checkNumInputs.js");
 
-// import { sendToServer } from "../server/server";
 
 
 
@@ -16225,25 +16223,23 @@ const form = state => {
             Object(_server_server__WEBPACK_IMPORTED_MODULE_1__["postData"])(`http://localhost:3000/${resource}`, json).then(data => {
               console.log(data);
               Object(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageModal"])(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageStatus"].success);
-            }) //.then(data => data)
-            .catch(() => Object(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageModal"])(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageStatus"].error)); //.finally(() => form.reset())
+            }).catch(() => Object(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageModal"])(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageStatus"].error));
           };
 
           sendToServer(form, 'clients');
           closeModalCallBack();
           closeMeasurerCallModal();
           closeBalconyEndForm();
-          document.body.style.overflow = ''; // come back to scroll on page
+          document.body.style.overflow = ''; // back scroll on page
 
           document.querySelector('#width').value = ''; // clear balcony form after sent!
 
-          document.querySelector('#height').value = ''; // clear balcony form after sent!
-
+          document.querySelector('#height').value = '';
           inputName.value = '';
           inputPhone.value = '';
         } else {
           inputPhone.classList.add('input_error');
-          Object(_calcInTabs__WEBPACK_IMPORTED_MODULE_2__["showErrorInputMessage"])(inputPhone, 'Please, enter correct phone number.');
+          Object(_balconyCalcModalTabs__WEBPACK_IMPORTED_MODULE_2__["showErrorInputMessage"])(inputPhone, 'Please, enter correct phone number.');
         }
       });
     });
@@ -16308,25 +16304,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "calcScroll", function() { return calcScroll; });
 
 
-const closeModal = (modal, crossClass = '.popup_close') => {
+const closeModal = (modal, crossClass = '.popup_close', allowedClickOverlay = true) => {
   const crossCloseModal = document.querySelectorAll(crossClass);
-  modal.addEventListener('click', e => {
-    // close Modal by click overlay
-    if (e.target.classList.contains('popup_overlay')) {
-      modal.style.display = 'none';
-      document.body.style.overflow = ''; // come back to scroll on page
 
-      document.body.style.marginRight = `0px`;
+  const hideDisplay = () => {
+    modal.style.display = 'none';
+    document.body.style.overflow = ''; // come back to scroll on page
+
+    document.body.style.marginRight = `0px`;
+  };
+
+  if (allowedClickOverlay) {
+    modal.addEventListener('click', e => {
+      // close Modal by click overlay
+      if (e.target.classList.contains('popup_overlay')) {
+        hideDisplay();
+      }
+    });
+  }
+
+  document.addEventListener('keydown', e => {
+    // close Modal by keydown Escape
+    if (e.code === 'Escape') {
+      hideDisplay();
     }
   });
-  crossCloseModal.forEach(cross => {
-    // close Modal by click cross
-    cross.addEventListener('click', () => {
-      modal.style.display = 'none';
-      document.body.style.overflow = '';
-      document.body.style.marginRight = `0px`;
-    });
-  });
+  crossCloseModal.forEach(cross => cross.addEventListener('click', hideDisplay));
 };
 const calcScroll = () => {
   let div = document.createElement('div');
@@ -16370,7 +16373,7 @@ const modals = () => {
   };
 
   showModal(orderCallBack, measurerCallBtn);
-  setTimeout(showMeasurerCallModal, 1160000); //in 60 sec show Modal
+  setTimeout(showMeasurerCallModal, 20000); //in 20 sec show Modal
 
   closeModal(measurerCallModal, '.popup_close');
   closeModal(modalCallBack, '.popup_close');
@@ -16389,7 +16392,7 @@ const modals = () => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-const tabs = () => {
+const tabs = state => {
   const tabItem = document.querySelectorAll('.glazing_block');
   const tabContent = document.querySelectorAll('.glazing_content');
 
@@ -16402,9 +16405,11 @@ const tabs = () => {
   const removeActiveClassTab = () => tabItem.forEach(tab => tab.children[1].classList.remove('active'));
 
   const choosingRightBalconyInFormCalcProfile = i => {
-    const balconyTypeInModal = document.querySelector('#view_type').querySelectorAll('option');
-    balconyTypeInModal.forEach((balconyType, index) => {
+    const balconyTypesInModal = document.querySelector('#view_type').querySelectorAll('option');
+    balconyTypesInModal.forEach((balconyType, index) => {
       if (index === i) {
+        state["type"] = balconyType.value; // pick in calc modal right type of balcony(in select)
+
         return balconyType.selected = true;
       }
     });
@@ -16535,7 +16540,7 @@ const timer = deadline => {
 /*!*********************************!*\
   !*** ./src/js/server/server.js ***!
   \*********************************/
-/*! exports provided: postData, messageStatus, messageModal, sendToServer */
+/*! exports provided: postData, messageStatus, messageModal */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16543,10 +16548,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "postData", function() { return postData; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "messageStatus", function() { return messageStatus; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "messageModal", function() { return messageModal; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sendToServer", function() { return sendToServer; });
-/* harmony import */ var core_js_modules_es_object_from_entries__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.from-entries */ "./node_modules/core-js/modules/es.object.from-entries.js");
-/* harmony import */ var core_js_modules_es_object_from_entries__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_from_entries__WEBPACK_IMPORTED_MODULE_0__);
-
 const postData = async (url, data) => {
   const result = await fetch(url, {
     method: "POST",
@@ -16561,9 +16562,7 @@ const messageStatus = {
   loading: "Loading...",
   success: `<span class="modal_message_tac">Thank you!</span> Soon we will contact you!`,
   error: "Error! Please try again."
-}; // showThanksModal(message.success); // message 
-// statusMessage.remove();
-
+};
 const messageModal = status => {
   const forMessageDiv = document.querySelector('.header');
   const div = document.createElement('div');
@@ -16572,20 +16571,6 @@ const messageModal = status => {
   setTimeout(() => {
     div.remove();
   }, 3500);
-};
-const sendToServer = (form, resource = 'clients') => {
-  const formData = new FormData(form);
-  const json = JSON.stringify(Object.fromEntries(formData)); // if (form.getAttribute('data-calc') === "end") {
-  //   for (let key in state) {
-  //     formData.append(key, state[key]);
-  //   }
-  // }
-
-  postData(`http://localhost:3000/${resource}`, json).then(data => {
-    console.log(data);
-    messageModal(messageStatus.success);
-  }) //.then(data => data)
-  .catch(() => messageModal(messageStatus.error)); //.finally(() => form.reset())
 };
 
 /***/ }),
