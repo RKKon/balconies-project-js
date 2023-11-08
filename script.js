@@ -15905,10 +15905,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener("DOMContentLoaded", () => {
   "use strict";
 
-  let modalState = {}; // main work happening with state in changeModalState(). But for user experience 
+  let modalState = {}; // main work happening with state in changeModalState(). But for user experience
   // I had to put some setting changing in state, like if user choose Aluminum balcony(not in form),
   // in select and in data to server save that parameter.
 
@@ -15918,7 +15918,9 @@ window.addEventListener('DOMContentLoaded', () => {
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_3__["default"])(modalState);
   Object(_modules_balconyCalcModalTabs__WEBPACK_IMPORTED_MODULE_4__["default"])(modalState);
   Object(_modules_form__WEBPACK_IMPORTED_MODULE_6__["default"])(modalState);
-  Object(_modules_timer__WEBPACK_IMPORTED_MODULE_5__["default"])('2022-12-31'); // you can set a date which you needed
+  Object(_modules_timer__WEBPACK_IMPORTED_MODULE_5__["default"])("2022-12-31"); // you can set a date which you needed
+}, {
+  passive: true
 });
 
 /***/ }),
@@ -16188,58 +16190,64 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const form = state => {
-  const forms = document.querySelectorAll('.form');
+  const forms = document.querySelectorAll(".form");
 
-  const closeModalCallBack = () => document.querySelector('.popup').style.display = 'none';
+  const closeModalCallBack = () => document.querySelector(".popup").style.display = "none";
 
-  const closeMeasurerCallModal = () => document.querySelector('.popup_engineer').style.display = 'none';
+  const closeMeasurerCallModal = () => document.querySelector(".popup_engineer").style.display = "none";
 
-  const closeBalconyEndForm = () => document.querySelector('.popup_calc_end').style.display = 'none';
+  const closeBalconyEndForm = () => document.querySelector(".popup_calc_end").style.display = "none";
+
+  const sendToServer = (form, resource = "clients") => {
+    const formData = new FormData(form);
+
+    if (form.getAttribute("data-calc") === "end") {
+      for (let key in state) {
+        formData.append(key, state[key]);
+      }
+    }
+
+    const json = JSON.stringify(Object.fromEntries(formData)); // transform in JSON
+    // on GitHub no json server. this why using it.
+
+    const randomID = Math.floor(Math.random() * (1000 - 200 + 1)) + 200;
+    const showResult = JSON.parse(json);
+    showResult.id = randomID;
+    console.log(showResult);
+    Object(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageModal"])(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageStatus"].success); // postData(`http://localhost:3000/${resource}`, json)
+    //   .then((data) => {
+    //     console.log(data);
+    //     messageModal(messageStatus.success);
+    //   })
+    //   .catch(() => messageModal(messageStatus.error));
+  };
 
   const sendForm = () => {
     Object(_checkNumInputs__WEBPACK_IMPORTED_MODULE_3__["default"])('input[name="user_phone"]');
     forms.forEach(form => {
-      form.addEventListener('submit', e => {
+      form.addEventListener("submit", e => {
         e.preventDefault();
         const inputName = form.children[1];
         const inputPhone = form.children[2];
         const validationPhone = /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
 
         if (validationPhone.test(inputPhone.value)) {
-          inputPhone.classList.remove('input_error');
+          inputPhone.classList.remove("input_error");
           Object(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageModal"])(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageStatus"].loading);
-
-          const sendToServer = (form, resource = 'clients') => {
-            const formData = new FormData(form);
-
-            if (form.getAttribute('data-calc') === "end") {
-              for (let key in state) {
-                formData.append(key, state[key]);
-              }
-            }
-
-            const json = JSON.stringify(Object.fromEntries(formData)); // transform in JSON
-
-            Object(_server_server__WEBPACK_IMPORTED_MODULE_1__["postData"])(`http://localhost:3000/${resource}`, json).then(data => {
-              console.log(data);
-              Object(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageModal"])(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageStatus"].success);
-            }).catch(() => Object(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageModal"])(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageStatus"].error));
-          };
-
-          sendToServer(form, 'clients');
+          sendToServer(form, "clients");
           closeModalCallBack();
           closeMeasurerCallModal();
           closeBalconyEndForm();
-          document.body.style.overflow = ''; // back scroll on page
+          document.body.style.overflow = ""; // back scroll on page
 
-          document.querySelector('#width').value = ''; // clear balcony form after sent!
+          document.querySelector("#width").value = ""; // clear balcony form after sent!
 
-          document.querySelector('#height').value = '';
-          inputName.value = '';
-          inputPhone.value = '';
+          document.querySelector("#height").value = "";
+          inputName.value = "";
+          inputPhone.value = "";
         } else {
-          inputPhone.classList.add('input_error');
-          Object(_balconyCalcModalTabs__WEBPACK_IMPORTED_MODULE_2__["showErrorInputMessage"])(inputPhone, 'Please, enter correct phone number.');
+          inputPhone.classList.add("input_error");
+          Object(_balconyCalcModalTabs__WEBPACK_IMPORTED_MODULE_2__["showErrorInputMessage"])(inputPhone, "Please, enter correct phone number.");
         }
       });
     });
@@ -16558,19 +16566,39 @@ const postData = async (url, data) => {
     method: "POST",
     body: data,
     headers: {
-      'Content-type': 'application/json'
+      "Content-type": "application/json"
     }
   });
   return await result.json();
-};
+}; // export const updateDB = async (url = "../../../db.json") => {
+//   let newData;
+//   await fetch(url)
+//     .then((response) => response.json())
+//     .then((data) => {
+//       data.clients.push({ name: "Mike", age: 30, city: "New York" });
+//       newData = JSON.stringify(data);
+//     });
+//   await fetch(url, {
+//     method: "POST",
+//     headers: {
+//       "Content-type": "application/json; charset=utf-8",
+//     },
+//     body: newData,
+//   })
+//     .then((response) => response.json())
+//     .then((data) => console.log(data))
+//     .catch((error) => console.error(error));
+// };
+// updateDB();
+
 const messageStatus = {
   loading: "Loading...",
   success: `<span class="modal_message_tac">Thank you!</span> Soon we will contact you!`,
-  error: "Error! Please try again."
+  error: "Server error! You probably did not turn on json server."
 };
 const messageModal = status => {
-  const forMessageDiv = document.querySelector('.header');
-  const div = document.createElement('div');
+  const forMessageDiv = document.querySelector(".header");
+  const div = document.createElement("div");
   div.innerHTML = `<h2 class="modal_message">${status}</h2>`;
   forMessageDiv.append(div);
   setTimeout(() => {
