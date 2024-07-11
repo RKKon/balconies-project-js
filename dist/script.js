@@ -15908,7 +15908,8 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener("DOMContentLoaded", () => {
   "use strict";
 
-  let modalState = {}; // main work happening with state in changeModalState(). But for user experience
+  let modalState = {};
+  // main work happening with state in changeModalState(). But for user experience
   // I had to put some setting changing in state, like if user choose Aluminum balcony(not in form),
   // in select and in data to server save that parameter.
 
@@ -15945,7 +15946,6 @@ const showErrorInputMessage = (placePutMessage, errorMessage = 'Error, enter cor
   placePutMessage.after(divErrorMessage);
   setTimeout(() => divErrorMessage.remove(), 4000);
 };
-
 const balconyCalcModalTabs = state => {
   const balconyPopupCalc = document.querySelector('.popup_calc');
   const balconyType = document.querySelectorAll('.balcon_icons_img');
@@ -15959,41 +15959,31 @@ const balconyCalcModalTabs = state => {
   Object(_modals__WEBPACK_IMPORTED_MODULE_0__["closeModal"])(balconyPopupCalc, '.popup_calc_close');
   Object(_modals__WEBPACK_IMPORTED_MODULE_0__["closeModal"])(balconyPopupCalcProfile, '.popup_calc_profile_close', false);
   Object(_modals__WEBPACK_IMPORTED_MODULE_0__["closeModal"])(balconyPopupCalcEnd, '.popup_calc_end_close', false);
-
   const balconyRemoveActiveClass = () => {
     return balconyType.forEach(balcony => balcony.classList.remove('do_image_more'));
   };
-
   const setBalconyModalImg = () => {
     balconyType.forEach((balcony, i) => {
       const balconyModalBigImg = document.querySelectorAll('.big_img img');
       balconyModalBigImg[0].classList.add('big_img_active'); //show first type of big img
-
       balcony.addEventListener('click', () => {
         balconyRemoveActiveClass();
         balcony.classList.add('do_image_more'); // add active class      
         // add big picture
-
         balconyModalBigImg.forEach(bigImg => bigImg.classList.remove('big_img_active')); //remove class
-
         balconyModalBigImg[i].classList.add('big_img_active'); //add class active 
       });
     });
   };
-
   setBalconyModalImg();
-
   const showPopupCalcProfile = () => balconyPopupCalcProfile.style.display = 'block';
-
   const closeBalconyPopupCalc = () => balconyPopupCalc.style.display = 'none';
-
   const validationBalconySize = () => {
     balconyPopupCalcBtn.addEventListener('click', () => {
       const balconyWidthSize = document.querySelector('#width');
       const balconyHeightSize = document.querySelector('#height');
       const inputWidth = +balconyWidthSize.value;
       const inputHeight = +balconyHeightSize.value;
-
       if (inputWidth && inputHeight && typeof inputWidth !== 'string' && typeof inputHeight !== 'string') {
         closeBalconyPopupCalc();
         showPopupCalcProfile();
@@ -16002,23 +15992,17 @@ const balconyCalcModalTabs = state => {
         balconyHeightSize.classList.add('input_error');
         showErrorInputMessage(balconyHeightSize.nextElementSibling, 'Please, enter size.');
       }
-
       if (inputWidth && typeof inputWidth !== 'string') {
         balconyWidthSize.classList.remove('input_error');
       }
-
       if (inputHeight && typeof inputHeight !== 'string') {
         balconyHeightSize.classList.remove('input_error');
       }
     });
   };
-
   validationBalconySize();
-
   const closeBalconyPopupProfile = () => balconyPopupCalcProfile.style.display = 'none';
-
   const showBalconyPopupCalcEnd = () => balconyPopupCalcEnd.style.display = 'block';
-
   const choosingColdOrWarmBalcony = () => {
     popupCalcProfileBtn.addEventListener('click', () => {
       if (balconyCalcCheckbox[0].checked && !balconyCalcCheckbox[1].checked) {
@@ -16033,45 +16017,34 @@ const balconyCalcModalTabs = state => {
       }
     });
   };
-
   choosingColdOrWarmBalcony();
-
   const setBalconyCalcCheckbox = (i = 0) => {
     balconyCalcCheckbox[1].checked = false;
     balconyCalcCheckbox[0].checked = false;
     balconyCalcCheckbox[i].checked = true;
     i === 0 ? state["profile"] = 'Cold' : state["profile"] = 'Warm'; // set up default profile(cold or warm)
   };
-
   const glazingPriceBtnCold = document.querySelectorAll('.glazing_cold_btn');
   const glazingPriceBtnWarm = document.querySelectorAll('.glazing_warm_btn');
-
   const openModalBalconyCalc = (openModalBtn, i = 0) => {
     openModalBtn.forEach(btn => {
       btn.addEventListener('click', () => {
         balconyPopupCalc.style.display = 'block';
         document.body.style.marginRight = `${scroll}px`;
         setBalconyCalcCheckbox(i);
-
         if (!state["form"]) {
           state["form"] = 1;
         } // set up default balcony form
-
-
         if (!state["type"]) {
           state["type"] = 'tree';
         } // by default pick tree      
-
-
         document.body.style.overflow = 'hidden'; // block scroll
       });
     });
   };
-
   openModalBalconyCalc(glazingPriceBtnCold, 0);
   openModalBalconyCalc(glazingPriceBtnWarm, 1);
 };
-
 /* harmony default export */ __webpack_exports__["default"] = (balconyCalcModalTabs);
 
 /***/ }),
@@ -16087,7 +16060,6 @@ const balconyCalcModalTabs = state => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _checkNumInputs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./checkNumInputs */ "./src/js/modules/checkNumInputs.js");
 
-
 const changeModalState = state => {
   const windowForm = document.querySelectorAll('.balcon_icons_img');
   const windowWidth = document.querySelectorAll('#width');
@@ -16096,7 +16068,6 @@ const changeModalState = state => {
   const windowProfile = document.querySelectorAll('.checkbox');
   Object(_checkNumInputs__WEBPACK_IMPORTED_MODULE_0__["default"])('#width');
   Object(_checkNumInputs__WEBPACK_IMPORTED_MODULE_0__["default"])('#height');
-
   const bindActionToElements = (event, elem, prop) => {
     elem.forEach((item, i) => {
       item.addEventListener(event, () => {
@@ -16104,13 +16075,11 @@ const changeModalState = state => {
           case 'SPAN':
             state[prop] = i + 1;
             break;
-
           case "INPUT":
             if (item.getAttribute('type') === 'checkbox') {
               i === 0 ? state[prop] = 'Cold' : state[prop] = 'Warm';
               elem.forEach((box, k) => {
                 box.checked = false;
-
                 if (i == k) {
                   box.checked = true;
                 }
@@ -16118,26 +16087,21 @@ const changeModalState = state => {
             } else {
               state[prop] = item.value;
             }
-
             break;
-
           case 'SELECT':
             state[prop] = item.value;
             break;
         }
-
         console.log(state);
       });
     });
   };
-
   bindActionToElements('click', windowForm, 'form');
   bindActionToElements('input', windowWidth, 'width');
   bindActionToElements('input', windowHeight, 'height');
   bindActionToElements('change', windowType, 'type');
   bindActionToElements('change', windowProfile, 'profile');
 };
-
 /* harmony default export */ __webpack_exports__["default"] = (changeModalState);
 
 /***/ }),
@@ -16154,7 +16118,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.string.replace */ "./node_modules/core-js/modules/es.string.replace.js");
 /* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0__);
 
-
 const checkNumInputs = selector => {
   const numInputs = document.querySelectorAll(selector);
   numInputs.forEach(item => {
@@ -16163,7 +16126,6 @@ const checkNumInputs = selector => {
     });
   });
 };
-
 /* harmony default export */ __webpack_exports__["default"] = (checkNumInputs);
 
 /***/ }),
@@ -16188,40 +16150,34 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 const form = state => {
   const forms = document.querySelectorAll(".form");
-
   const closeModalCallBack = () => document.querySelector(".popup").style.display = "none";
-
   const closeMeasurerCallModal = () => document.querySelector(".popup_engineer").style.display = "none";
-
   const closeBalconyEndForm = () => document.querySelector(".popup_calc_end").style.display = "none";
-
   const sendToServer = (form, resource = "clients") => {
     const formData = new FormData(form);
-
     if (form.getAttribute("data-calc") === "end") {
       for (let key in state) {
         formData.append(key, state[key]);
       }
     }
-
     const json = JSON.stringify(Object.fromEntries(formData)); // transform in JSON
-    // on GitHub no json server. this why using it.
 
+    // on GitHub no json server. this why using it.
     const randomID = Math.floor(Math.random() * (1000 - 200 + 1)) + 200;
     const showResult = JSON.parse(json);
     showResult.id = randomID;
     console.log(showResult);
-    Object(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageModal"])(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageStatus"].success); // postData(`http://localhost:3000/${resource}`, json)
+    Object(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageModal"])(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageStatus"].success);
+
+    // postData(`http://localhost:3000/${resource}`, json)
     //   .then((data) => {
     //     console.log(data);
     //     messageModal(messageStatus.success);
     //   })
     //   .catch(() => messageModal(messageStatus.error));
   };
-
   const sendForm = () => {
     Object(_checkNumInputs__WEBPACK_IMPORTED_MODULE_3__["default"])('input[name="user_phone"]');
     forms.forEach(form => {
@@ -16230,7 +16186,6 @@ const form = state => {
         const inputName = form.children[1];
         const inputPhone = form.children[2];
         const validationPhone = /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
-
         if (validationPhone.test(inputPhone.value)) {
           inputPhone.classList.remove("input_error");
           Object(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageModal"])(_server_server__WEBPACK_IMPORTED_MODULE_1__["messageStatus"].loading);
@@ -16241,7 +16196,6 @@ const form = state => {
           document.body.style.overflow = ""; // back scroll on page
 
           document.querySelector("#width").value = ""; // clear balcony form after sent!
-
           document.querySelector("#height").value = "";
           inputName.value = "";
           inputPhone.value = "";
@@ -16252,10 +16206,8 @@ const form = state => {
       });
     });
   };
-
   sendForm();
 };
-
 /* harmony default export */ __webpack_exports__["default"] = (form);
 
 /***/ }),
@@ -16271,30 +16223,63 @@ const form = state => {
 __webpack_require__.r(__webpack_exports__);
 const imageEnlargement = () => {
   const div = document.createElement('div');
-  const worksImg = document.querySelectorAll('.worksImg');
-  worksImg.forEach(picture => {
+  const worksImages = document.querySelectorAll('.worksImg');
+  let currentIndex = 0;
+  worksImages.forEach((picture, index) => {
     picture.addEventListener('click', e => {
       e.preventDefault();
       document.body.style.overflow = 'hidden'; // locked scroll on page
-
-      if (/Android|webOS|iPhone|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+      currentIndex = index;
+      const mobile = /Android|webOS|iPhone|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i;
+      if (mobile.test(navigator.userAgent)) {
         div.classList.add('show_work_overlay');
         div.innerHTML = `<img class="phone_bigger_size_img" src="${picture.children[0].children[0].src}" alt='our work'></img>`;
         document.querySelector('.works .row').append(div);
       } else {
         div.classList.add('show_work_overlay');
-        div.innerHTML = `<img class="big_size_img" src="${picture.children[0].href}" alt='our work'></img>`;
+        createCurrentImg();
         document.querySelector('.works .row').append(div);
       }
     });
   });
-  div.addEventListener('click', () => {
-    div.classList.remove('show_work_overlay');
-    div.innerHTML = '';
-    document.body.style.overflow = '';
+  div.addEventListener('click', e => {
+    if (e.target.classList.contains('slider_arrow_left')) {
+      currentIndex = currentIndex > 0 ? currentIndex - 1 : worksImages.length - 1;
+      createCurrentImg();
+    } else if (e.target.classList.contains('slider_arrow_right')) {
+      currentIndex = currentIndex < worksImages.length - 1 ? currentIndex + 1 : 0;
+      createCurrentImg();
+    } else {
+      div.classList.remove('show_work_overlay');
+      div.innerHTML = '';
+      document.body.style.overflow = '';
+    }
+  });
+  function createCurrentImg() {
+    let currentSlide = worksImages[currentIndex];
+    return div.innerHTML = `
+      <img class="slider_arrow_left" src="assets/img/glazing/left_arrow.png" alt="left arrow"></img>
+      <img class="big_size_img" src="${currentSlide.children[0].href}" alt='our work'></img>
+      <img class="slider_arrow_right" src="assets/img/glazing/right_arrow.png" alt="right arrow"></img>`;
+  }
+  let startX = 0;
+  let endX = 0;
+  div.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+  });
+  div.addEventListener('touchmove', e => {
+    endX = e.touches[0].clientX;
+  });
+  div.addEventListener('touchend', () => {
+    if (startX > endX + 50) {
+      currentIndex = currentIndex < worksImages.length - 1 ? currentIndex + 1 : 0;
+    } else if (startX < endX - 50) {
+      currentIndex = currentIndex > 0 ? currentIndex - 1 : worksImages.length - 1;
+    }
+    let currentSlide = worksImages[currentIndex];
+    div.innerHTML = `<img class="phone_bigger_size_img" src="${currentSlide.children[0].children[0].src}" alt='our work'></img>`;
   });
 };
-
 /* harmony default export */ __webpack_exports__["default"] = (imageEnlargement);
 
 /***/ }),
@@ -16312,35 +16297,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "calcScroll", function() { return calcScroll; });
 
 
-const closeModal = (modal, crossClass = '.popup_close', allowedClickOverlay = true) => {
+const closeModal = (modal, crossClass = ".popup_close", allowedClickOverlay = true) => {
   const crossCloseModal = document.querySelectorAll(crossClass);
-
   const hideDisplay = () => {
-    modal.style.display = 'none';
-    document.body.style.overflow = ''; // come back to scroll on page
-
+    modal.style.display = "none";
+    document.body.style.overflow = ""; // come back to scroll on page
     document.body.style.marginRight = `0px`;
   };
-
   if (allowedClickOverlay) {
-    modal.addEventListener('click', e => {
+    modal.addEventListener("click", e => {
       // close Modal by click overlay
-      if (e.target.classList.contains('popup_overlay')) {
+      if (e.target.classList.contains("popup_overlay")) {
         hideDisplay();
       }
     });
   }
-
-  document.addEventListener('keydown', e => {
+  document.addEventListener("keydown", e => {
     // close Modal by keydown Escape
-    if (e.code === 'Escape') {
+    if (e.code === "Escape") {
       hideDisplay();
     }
   });
-  crossCloseModal.forEach(cross => cross.addEventListener('click', hideDisplay));
+  crossCloseModal.forEach(cross => cross.addEventListener("click", hideDisplay));
 };
 const calcScroll = () => {
-  let div = document.createElement('div');
+  let div = document.createElement("div");
   div.style.width = "50px";
   div.style.height = "50px";
   div.style.overflow = "scroll";
@@ -16350,48 +16331,39 @@ const calcScroll = () => {
   div.remove();
   return scrollWidth;
 };
-
 const modals = () => {
-  const modalCallBack = document.querySelector('.popup');
-  const orderCallBack = document.querySelectorAll('.phone_link');
-  const measurerCallBtn = document.querySelector('.popup_engineer_btn');
-  const measurerCallModal = document.querySelector('.popup_engineer');
+  const modalCallBack = document.querySelector(".popup");
+  const orderCallBack = document.querySelectorAll(".phone_link");
+  const measurerCallBtn = document.querySelector(".popup_engineer_btn");
+  const measurerCallModal = document.querySelector(".popup_engineer");
   const scroll = calcScroll();
-
-  const showModalCallBack = () => modalCallBack.style.display = 'block';
-
-  const showMeasurerCallModal = () => measurerCallModal.style.display = 'block';
-
+  const showModalCallBack = () => modalCallBack.style.display = "block";
+  const showMeasurerCallModal = () => measurerCallModal.style.display = "block";
   const lockScrollOnPage = () => {
-    document.body.style.overflow = 'hidden'; // locked scroll on page
-
+    document.body.style.overflow = "hidden"; // locked scroll on page
     document.body.style.marginRight = `${scroll}px`;
   };
-
   const showModalInTime = setTimeout(showMeasurerCallModal, 20000); //in 20 sec show Modal
 
   const showModal = (openCallBackModal, openCallMeasurerModal) => {
     openCallBackModal.forEach(modal => {
-      modal.addEventListener('click', e => {
+      modal.addEventListener("click", e => {
         e.preventDefault(); // because of tag <a>
-
         showModalCallBack();
         lockScrollOnPage();
         clearTimeout(showModalInTime);
       });
     });
-    openCallMeasurerModal.addEventListener('click', () => {
+    openCallMeasurerModal.addEventListener("click", () => {
       showMeasurerCallModal();
       lockScrollOnPage();
       clearTimeout(showModalInTime);
     });
   };
-
   showModal(orderCallBack, measurerCallBtn);
-  closeModal(measurerCallModal, '.popup_close');
-  closeModal(modalCallBack, '.popup_close');
+  closeModal(measurerCallModal, ".popup_close");
+  closeModal(modalCallBack, ".popup_close");
 };
-
 /* harmony default export */ __webpack_exports__["default"] = (modals);
 
 /***/ }),
@@ -16408,30 +16380,22 @@ __webpack_require__.r(__webpack_exports__);
 const tabs = state => {
   const tabItem = document.querySelectorAll('.glazing_block');
   const tabContent = document.querySelectorAll('.glazing_content');
-
   const hideTabContent = () => tabContent.forEach(item => item.style.display = 'none');
-
   const showTabContent = i => tabContent[i].style.display = 'block';
-
   const addActiveClassToTab = i => tabItem[i].children[1].classList.add('active');
-
   const removeActiveClassTab = () => tabItem.forEach(tab => tab.children[1].classList.remove('active'));
-
   const choosingRightBalconyInFormCalcProfile = i => {
     const balconyTypesInModal = document.querySelector('#view_type').querySelectorAll('option');
     balconyTypesInModal.forEach((balconyType, index) => {
       if (index === i) {
         state["type"] = balconyType.value; // pick in calc modal right type of balcony(in select)
-
         return balconyType.selected = true;
       }
     });
   };
-
   const openTab = () => {
     tabItem.forEach((tab, i) => {
       tabItem[0].children[1].classList.add('active'); // fist tab become active
-
       tab.addEventListener('click', () => {
         hideTabContent();
         removeActiveClassTab();
@@ -16441,9 +16405,7 @@ const tabs = state => {
       });
     });
   };
-
   openTab();
-
   const usingDecorationTabs = () => {
     const balconyDecorationContent = document.querySelector(".decoration_content .row");
     const balconyDecorationTab = document.querySelectorAll('.no_click'); //tabs
@@ -16453,21 +16415,16 @@ const tabs = state => {
         for (let k = 0; k < balconyDecorationTab.length; k++) {
           balconyDecorationTab[k].classList.remove('after_click');
         }
-
         tab.classList.add('after_click');
-
         for (let index = 0; index < balconyDecorationContent.children.length; index++) {
           balconyDecorationContent.children[index].style.display = 'none';
         }
-
         balconyDecorationContent.children[i].style.display = 'block';
       });
     });
   };
-
   usingDecorationTabs();
 };
-
 /* harmony default export */ __webpack_exports__["default"] = (tabs);
 
 /***/ }),
@@ -16499,7 +16456,6 @@ const timer = deadline => {
       hours = Math.floor(total / (1000 * 60 * 60) % 24);
       days = Math.floor(total / (1000 * 60 * 60 * 24));
     }
-
     return {
       total,
       seconds,
@@ -16508,19 +16464,15 @@ const timer = deadline => {
       days
     };
   };
-
   getRemainingTime(deadline);
-
   const setTimer = endTime => {
     const days = document.querySelector('#days');
     const hours = document.querySelector('#hours');
     const minutes = document.querySelector('#minutes');
     const seconds = document.querySelector('#seconds');
     const timeInterval = setInterval(updateTimer, 1000);
-
     function updateTimer() {
       const timer = getRemainingTime(endTime);
-
       const getZeroForTimer = num => {
         if (num >= 0 && num < 10) {
           return `0${num}`;
@@ -16528,23 +16480,18 @@ const timer = deadline => {
           return num;
         }
       };
-
       seconds.innerHTML = getZeroForTimer(timer.seconds);
       minutes.innerHTML = getZeroForTimer(timer.minutes);
       hours.innerHTML = getZeroForTimer(timer.hours);
       days.innerHTML = getZeroForTimer(timer.days);
-
       if (timer.total <= 0) {
         clearInterval(timeInterval);
       }
     }
-
     updateTimer();
   };
-
   setTimer(deadline);
 };
-
 /* harmony default export */ __webpack_exports__["default"] = (timer);
 
 /***/ }),
@@ -16570,7 +16517,9 @@ const postData = async (url, data) => {
     }
   });
   return await result.json();
-}; // export const updateDB = async (url = "../../../db.json") => {
+};
+
+// export const updateDB = async (url = "../../../db.json") => {
 //   let newData;
 //   await fetch(url)
 //     .then((response) => response.json())
